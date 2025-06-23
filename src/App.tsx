@@ -6,6 +6,9 @@ import CadastroImovel from "./Pages/CadastroImovel";
 import ResultadosBusca from "./Pages/ResultadoBusca";
 import DetalhesImovel from "./Pages/DetalhesImovel";
 import Contato from "./Pages/Contato";
+import EncontrarImovel from "./Pages/EncontrarImovel";
+import Sobre from "./Pages/Sobre";
+import CampanhaAjuda from "./Pages/CampanhaAjuda";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 // import Contato from "./Pages/Contato";
@@ -23,6 +26,12 @@ export default function App() {
         <Route path="/resultado" element={<ResultadosBusca />} />
         <Route path="/imovel/:id" element={<DetalhesImovel />} />
         <Route path="/contato" element={<Contato />} />
+        <Route path="/buscar" element={<EncontrarImovel />} />
+        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/ajuda" element={<CampanhaAjuda />} />
+
+
+
 
       </Routes>
     </BrowserRouter>

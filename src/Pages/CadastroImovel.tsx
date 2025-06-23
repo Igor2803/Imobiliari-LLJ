@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db, storage } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, updateDoc, doc, or } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import Header from "../Components/Header";
@@ -15,7 +15,7 @@ export default function CadastroImovel() {
   const [fotos, setFotos] = useState<FileList | null>(null);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [carregando, setCarregando] = useState(false);
-  const [progresso, setProgresso] = useState(0); // Novo estado
+  const [progresso, setProgresso] = useState(0);
   const [tipoImovel, setTipoImovel] = useState("Casa");
   const [endereco, setEndereco] = useState("");
   const [numero, setNumero] = useState("");
@@ -27,9 +27,10 @@ export default function CadastroImovel() {
   const [area, setArea] = useState("");
   const [vagas, setVagas] = useState("");
   const [bairro, setBairro] = useState("");
-
-
   const [sucesso, setSucesso] = useState(false);
+
+  const [busca, setBusca] = useState("");
+  const [imovelId, setImovelId] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -39,6 +40,43 @@ export default function CadastroImovel() {
         URL.createObjectURL(file)
       );
       setPreviewUrls(urls);
+    }
+  };
+
+  const handleBuscarImovel = async () => {
+    const q = query(
+      collection(db, "imoveis"),
+      or(
+        where("titulo", "==", busca),
+        where("cidade", "==", busca)
+      )
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty) {
+      const docRef = snapshot.docs[0];
+      const dados = docRef.data();
+
+      setImovelId(docRef.id);
+      setTitulo(dados.titulo);
+      setDescricao(dados.descricao);
+      setPreco(dados.preco);
+      setTipoNegocio(dados.tipoNegocio);
+      setTipoImovel(dados.tipoImovel);
+      setEndereco(dados.endereco);
+      setNumero(dados.numero);
+      setCidade(dados.cidade);
+      setEstado(dados.estado);
+      setCep(dados.cep);
+      setQuartos(dados.quartos);
+      setBanheiros(dados.banheiros);
+      setArea(dados.area);
+      setVagas(dados.vagas);
+      setBairro(dados.bairro);
+      setPreviewUrls(dados.fotos || []);
+    } else {
+      alert("Imóvel não encontrado");
     }
   };
 
@@ -52,7 +90,6 @@ export default function CadastroImovel() {
 
       if (fotos) {
         const total = fotos.length;
-        let progressoTotal = 0;
 
         for (let i = 0; i < total; i++) {
           const foto = fotos[i];
@@ -78,27 +115,49 @@ export default function CadastroImovel() {
         }
       }
 
-      await addDoc(collection(db, "imoveis"), {
-        titulo,
-        descricao,
-        preco,
-        tipoNegocio,
-        tipoImovel,
-        endereco,
-        numero,
-        cidade,
-        estado,
-        cep,
-        quartos,
-        banheiros,
-        area,
-        fotos: urlsFotos,
-        vagas,
-        bairro,
-        criadoEm: new Date(),
-      });
-      
-      // Limpar todos os campos do formulário
+      if (imovelId) {
+        const docRef = doc(db, "imoveis", imovelId);
+        await updateDoc(docRef, {
+          titulo,
+          descricao,
+          preco,
+          tipoNegocio,
+          tipoImovel,
+          endereco,
+          numero,
+          cidade,
+          estado,
+          cep,
+          quartos,
+          banheiros,
+          area,
+          fotos: urlsFotos.length > 0 ? urlsFotos : previewUrls,
+          vagas,
+          bairro,
+          atualizadoEm: new Date(),
+        });
+      } else {
+        await addDoc(collection(db, "imoveis"), {
+          titulo,
+          descricao,
+          preco,
+          tipoNegocio,
+          tipoImovel,
+          endereco,
+          numero,
+          cidade,
+          estado,
+          cep,
+          quartos,
+          banheiros,
+          area,
+          fotos: urlsFotos,
+          vagas,
+          bairro,
+          criadoEm: new Date(),
+        });
+      }
+
       setTitulo("");
       setDescricao("");
       setPreco("");
@@ -117,19 +176,9 @@ export default function CadastroImovel() {
       setFotos(null);
       setPreviewUrls([]);
       setProgresso(0);
+      setImovelId(null);
       setSucesso(true);
       setTimeout(() => setSucesso(false), 4000);
-      
-
-      setSucesso(true);
-setTimeout(() => setSucesso(false), 4000);
-      setTitulo("");
-      setDescricao("");
-      setPreco("");
-      setTipoNegocio("Venda");
-      setFotos(null);
-      setPreviewUrls([]);
-      setProgresso(0);
     } catch (error) {
       console.error("Erro ao cadastrar imóvel:", error);
       alert("Erro ao cadastrar imóvel");
@@ -144,6 +193,26 @@ setTimeout(() => setSucesso(false), 4000);
       <Navbar />
 
       <main className="flex-grow max-w-2xl mx-auto p-4 mt-6">
+        <h2 className="text-sm text-[#12304f] font-semibold text-center">Buscar para atualização</h2>
+
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="Buscar imóvel por título ou cidade"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            className="p-2 border rounded w-full"
+          />
+          <button
+            onClick={handleBuscarImovel}
+            type="button"
+            className="bg-[#12304f] text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Buscar
+          </button>
+        </div>
+
+        <main className="flex-grow max-w-2xl mx-auto p-4 mt-6">
       <h2 className="text-sm text-[#12304f] font-semibold text-center">CADASTRO DO IMÓVEL</h2>        
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -214,7 +283,7 @@ setTimeout(() => setSucesso(false), 4000);
       type="text"
       value={bairro}
       onChange={(e) => setBairro(e.target.value)}
-      placeholder="Cidade"
+      placeholder="Bairro"
       className="p-2 border rounded"
       required
     />
@@ -305,23 +374,28 @@ setTimeout(() => setSucesso(false), 4000);
       <div
         className="bg-[#12304f] h-full transition-all duration-300"
         style={{ width: `${progresso}%` }}
-      ></div>
+        ></div>
     </div>
   )}
 
-  <button
-    type="submit"
-    className="bg-[#12304f] text-white font-semibold py-2 rounded hover:bg-[#0f243d] transition"
-    disabled={carregando}
-  >
-    {carregando ? "Salvando..." : "Cadastrar Imóvel"}
-  </button>
+<button
+  type="submit"
+  className="bg-[#12304f] text-white font-semibold py-2 rounded hover:bg-[#0f243d] transition"
+  disabled={carregando}
+>
+  {carregando
+    ? "Salvando..."
+    : imovelId
+    ? "Atualizar Imóvel"
+    : "Cadastrar Imóvel"}
+</button>
 </form>
 {sucesso && (
   <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-2 text-center">
     Imóvel cadastrado com sucesso!
   </div>
 )}
+      </main>
       </main>
 
       <Footer />

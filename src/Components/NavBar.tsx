@@ -22,9 +22,9 @@ export default function Navbar() {
         {/* Menu (desktop) */}
         <ul className="hidden md:flex gap-6 text-sm text-[#12304f] font-semibold">
           <li><a href="/">HOME</a></li>
-          <li><a href="#">A IMOBILIÁRIA</a></li>
+          <li><Link to="/sobre">A IMOBILIÁRIA</Link></li>
           <li><Link to="/admin">CADASTRAR IMÓVEL</Link></li>
-          <li><a href="#">ENCONTRE MEU IMÓVEL</a></li>
+          <li><Link to="/buscar">ENCONTRE MEU IMÓVEL</Link></li>
           <li><Link to="/contato">CONTATO</Link></li>
         </ul>
       </div>
@@ -33,9 +33,9 @@ export default function Navbar() {
       {menuOpen && (
         <ul className="md:hidden flex flex-col items-center gap-4 pb-4 text-[#12304f] font-semibold">
           <li><a href="/">HOME</a></li>
-          <li><a href="#">A IMOBILIÁRIA</a></li>
+          <li><Link to="/sobre">A IMOBILIÁRIA</Link></li>
           <li><Link to="/admin">CADASTRAR IMÓVEL</Link></li>
-          <li><a href="#">ENCONTRE MEU IMÓVEL</a></li>
+          <li><Link to="/buscar">ENCONTRE MEU IMÓVEL</Link></li>
           <li><Link to="/contato">CONTATO</Link></li>
         </ul>
       )}
