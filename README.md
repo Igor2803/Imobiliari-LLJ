@@ -32,7 +32,7 @@ A Imobiliária LLJ surgiu com o propósito de facilitar a conexão entre quem pr
 ## 🌐 Demonstração
 
 🖼️ Veja o site em ação:  
-[https://imobiliaria-jovelino.web.app](https://imobiliaria-jovelino.web.app) *(se já publicado)*
+[[https://imobiliaria-jovelino.web.app](https://imobiliari-llj.vercel.app/)]*(se já publicado)*
 
 ## 📁 Como rodar localmente
 
