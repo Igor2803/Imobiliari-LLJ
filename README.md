@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+# 🏠 Imobiliária Jovelino
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bem-vindo ao repositório oficial da **Imobiliária LLJ**, uma plataforma digital voltada para divulgação e gerenciamento de imóveis residenciais e comerciais.
 
-Currently, two official plugins are available:
+## 🔎 Sobre o Projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A Imobiliária LLJ surgiu com o propósito de facilitar a conexão entre quem procura um imóvel e quem deseja vender ou alugar. Nosso site oferece:
 
-## Expanding the ESLint configuration
+- Cadastro completo de imóveis com fotos e informações detalhadas  
+- Busca por cidade ou título para facilitar a localização de imóveis  
+- Edição de imóveis já cadastrados  
+- Interface responsiva, moderna e intuitiva  
+- Campanha especial de apoio ao Rio Grande do Sul ❤️
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Funcionalidades
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- ✅ Cadastro de imóveis com upload de fotos  
+- ✅ Visualização de imóveis cadastrados  
+- ✅ Edição de imóveis existentes  
+- ✅ Busca por cidade ou título  
+- ✅ Campanha solidária com QR Code e PIX para doações  
+- ✅ Totalmente responsivo (funciona bem no celular e computador)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧪 Tecnologias Utilizadas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React.js**  
+- **Firebase (Firestore & Storage)**  
+- **Tailwind CSS**  
+- **Vite** (ou outro bundler, se for o caso)  
+- **TypeScript** (opcional)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 🌐 Demonstração
+
+🖼️ Veja o site em ação:  
+[https://imobiliaria-jovelino.web.app](https://imobiliaria-jovelino.web.app) *(se já publicado)*
+
+## 📁 Como rodar localmente
+
+```bash
+git clone https://github.com/seu-usuario/imobiliaria-jovelino.git
+cd imobiliaria-jovelino
+npm install
+npm run dev
